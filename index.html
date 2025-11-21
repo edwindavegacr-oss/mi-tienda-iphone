@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>iFix Market — Refacciones iPhone</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="navbar">
+    <div class="nav-left">
+      <button id="menuBtn" class="icon-btn" aria-label="Abrir menú">☰</button>
+      <a href="#" class="brand">iFix<span>Market</span></a>
+    </div>
+
+    <div class="search-wrap">
+      <input id="searchInput" type="search" placeholder="Buscar refacciones, pantallas, baterías..." autocomplete="off">
+      <button id="clearSearch" class="icon-btn" title="Limpiar búsqueda">✕</button>
+    </div>
+
+    <div class="nav-right">
+      <button id="filterToggle" class="btn small secondary">Filtros</button>
+      <button id="favoritesBtn" class="icon-btn" title="Favoritos">♡ <span id="favCount" class="badge">0</span></button>
+      <button id="themeToggle" class="icon-btn" title="Modo claro/oscuro">🌓</button>
+      <button id="cartBtn" class="icon-btn" title="Abrir carrito">🛒 <span id="cartCount" class="badge">0</span></button>
+    </div>
+  </header>
+
+  <!-- SIDEBAR FILTROS -->
+  <aside id="filters" class="panel hidden">
+    <h3>Filtros</h3>
+    <div class="filter-group">
+      <label>Modelo</label>
+      <select id="filterModel">
+        <option value="">Todos</option>
+        <option>iPhone 7</option>
+        <option>iPhone 8</option>
+        <option>iPhone X</option>
+        <option>iPhone XR</option>
+        <option>iPhone 11</option>
+        <option>iPhone 12</option>
+        <option>iPhone 13</option>
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label>Tipo</label>
+      <select id="filterType">
+        <option value="">Todos</option>
+        <option>Pantalla</option>
+        <option>Batería</option>
+        <option>Cámara</option>
+        <option>Flex</option>
+        <option>Altavoz</option>
+        <option>Micrófono</option>
+        <option>Chasis</option>
+      </select>
+    </div>
+
+    <div class="filter-group range">
+      <label>Precio (COP)</label>
+      <div class="range-row">
+        <input id="priceMin" type="number" placeholder="Min">
+        <input id="priceMax" type="number" placeholder="Max">
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <label><input id="filterFreeShip" type="checkbox"> Envío gratis</label>
+    </div>
+
+    <div class="filter-actions">
+      <button id="applyFilters" class="btn primary">Aplicar</button>
+      <button id="clearFilters" class="btn ghost">Limpiar</button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="container">
+    <section class="controls">
+      <div class="left">
+        <h1>Refacciones para iPhone</h1>
+        <p class="muted">Catálogo actualizado — haz clic en un producto para ver detalles.</p>
+      </div>
+
+      <div class="right">
+        <label>Ordenar:
+          <select id="sortSelect">
+            <option value="recommended">Recomendado</option>
+            <option value="price_asc">Precio: bajo → alto</option>
+            <option value="price_desc">Precio: alto → bajo</option>
+            <option value="name_asc">A → Z</option>
+          </select>
+        </label>
+      </div>
+    </section>
+
+    <section id="catalog" class="grid" aria-live="polite">
+      <!-- los productos se inyectan desde JS -->
+    </section>
+
+    <div id="emptyState" class="empty hidden">
+      <p>No se encontraron productos con esos criterios.</p>
+      <button id="resetBtn" class="btn primary">Mostrar todo</button>
+    </div>
+  </main>
+
+  <!-- SIDEBAR CARRITO -->
+  <aside id="cartSidebar" class="cart-panel hidden" aria-hidden="true">
+    <div class="cart-header">
+      <h3>Carrito <small id="cartItemsCount">0 items</small></h3>
+      <button id="closeCart" class="icon-btn">✕</button>
+    </div>
+    <div id="cartList" class="cart-list"></div>
+
+    <div class="cart-footer">
+      <div class="totals">
+        <div>Subtotal</div>
+        <div id="cartSubtotal">COP $0</div>
+      </div>
+      <button id="checkoutBtn" class="btn primary">Pagar</button>
+      <button id="clearCartBtn" class="btn ghost">Vaciar</button>
+    </div>
+  </aside>
+
+  <!-- MODAL PRODUCTO -->
+  <div id="productModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeModal" class="modal-close">✕</button>
+      <div class="modal-body">
+        <div class="gallery">
+          <img id="modalMainImg" src="" alt="">
+          <div id="modalThumbs" class="thumbs"></div>
+        </div>
+        <div class="meta">
+          <h2 id="modalTitle">Título</h2>
+          <div id="modalPrice" class="price">COP $0</div>
+          <p id="modalDesc" class="muted">Descripción</p>
+
+          <div class="meta-row">
+            <div><strong>Tipo:</strong> <span id="modalType"></span></div>
+            <div><strong>Modelo:</strong> <span id="modalModel"></span></div>
+          </div>
+
+          <div class="meta-actions">
+            <button id="addToCartBtn" class="btn primary">Agregar al carrito</button>
+            <button id="favToggle" class="btn ghost">♡ Favorito</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <template id="productTemplate">
+    <article class="card" tabindex="0">
+      <div class="ribbon"></div>
+      <img class="card-img" src="" alt="">
+      <div class="card-body">
+        <div class="card-title"></div>
+        <div class="card-sub muted"></div>
+        <div class="card-row">
+          <div class="price"></div>
+          <div class="card-actions">
+            <button class="btn tiny addCart">Agregar</button>
+            <button class="icon-btn favBtn" title="Agregar a favoritos">♡</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="script.js"></script>
+</body>
+</html>
