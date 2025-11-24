@@ -1,171 +1,341 @@
-/* ========================= */
-/* VARIABLES Y BASE          */
-/* ========================= */
-:root{
-  --bg:#f5f6f7;
-  --card:#fff;
-  --text:#12202b;
-  --muted:#6b7b88;
-  --accent:#0073c2;
-  --success:#2ecc71;
-  --yellow:#ffe600;
-  --glass: rgba(255,255,255,0.7);
+/* ============================
+   VARIABLES Y RESET
+============================ */
+:root {
+  --bg: #f5f5f5;
+  --bg-alt: #ffffff;
+  --text: #222;
+  --text-muted: #666;
+  --primary: #007bff;
+  --primary-dark: #0056c0;
+  --border: #ddd;
+  --radius: 10px;
+  --shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
 
-*{box-sizing:border-box}
-html,body{
-  height:100%;
-  margin:0;
-  font-family:Inter,Segoe UI,Arial,sans-serif;
-  color:var(--text);
-  background:var(--bg);
+[data-theme="dark"] {
+  --bg: #121212;
+  --bg-alt: #1e1e1e;
+  --text: #e5e5e5;
+  --text-muted: #aaa;
+  --primary: #4aa3ff;
+  --border: #333;
 }
 
-/* ========================= */
-/* CONTENEDORES              */
-/* ========================= */
-.container{max-width:1200px;margin:24px auto;padding:0 18px}
-
-/* ========================= */
-/* NAVBAR                    */
-/* ========================= */
-.navbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:12px 18px;
-  background:var(--yellow);
-  position:sticky;top:0;z-index:40;
-  box-shadow:0 2px 6px rgba(0,0,0,0.06)
-}
-.brand{font-weight:800;color:#111;text-decoration:none;font-size:20px}
-.brand span{color:var(--accent)}
-.search-wrap{flex:1;max-width:600px;display:flex;align-items:center;margin:0 12px}
-.search-wrap input{
-  flex:1;padding:10px 12px;border-radius:8px;
-  border:1px solid rgba(0,0,0,0.08)
-}
-.icon-btn{
-  background:transparent;border:0;padding:8px 10px;border-radius:8px;
-  cursor:pointer
-}
-.icon-btn:hover{background:rgba(0,0,0,0.04)}
-.nav-right{display:flex;gap:8px;align-items:center}
-
-/* ========================= */
-/* CONTROLS                  */
-/* ========================= */
-.controls{
-  display:flex;justify-content:space-between;
-  align-items:center;margin:18px 0
-}
-.controls h1{margin:0;font-size:22px}
-.controls .muted{color:var(--muted)}
-
-/* ========================= */
-/* GRID PRODUCTOS            */
-/* ========================= */
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(160px,1fr));
-  gap:12px
-}
-.card{
-  background:var(--card);border-radius:10px;overflow:hidden;
-  box-shadow:0 8px 24px rgba(13,30,45,0.06);
-  transition:transform .18s ease,box-shadow .18s ease;
-  cursor:pointer;display:flex;flex-direction:column;
-  max-width:220px;margin:auto
-}
-.card:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(13,30,45,0.09)}
-.card-img{width:100%;height:140px;object-fit:cover}
-.card-body{padding:10px;display:flex;flex-direction:column;gap:8px}
-.card-title{font-weight:700;font-size:15px}
-.card-sub{font-size:13px;color:var(--muted)}
-.card-row{display:flex;align-items:center;justify-content:space-between}
-.price{color:var(--success);font-weight:800}
-.card-actions{display:flex;gap:8px}
-
-/* ========================= */
-/* BOTONES                   */
-/* ========================= */
-.btn{
-  padding:8px 12px;border-radius:8px;border:0;cursor:pointer;
-  font-weight:700
-}
-.btn.primary{background:var(--accent);color:#fff}
-.btn.secondary{background:#e9f3ff;color:var(--accent)}
-.btn.ghost{background:transparent;border:1px solid rgba(0,0,0,0.06)}
-.btn.small{padding:6px 8px}
-.btn.tiny{padding:6px 8px;font-size:13px}
-
-/* BOTONES ADMIN */
-.editBtn{background:#ffb400;color:#111;border-radius:6px;padding:6px 8px}
-.deleteBtn{background:#ff3b30;color:#fff;border-radius:6px;padding:6px 8px}
-
-/* ========================= */
-/* PANEL FILTROS             */
-/* ========================= */
-.panel{
-  position:fixed;left:16px;top:80px;width:260px;background:var(--card);
-  padding:14px;border-radius:12px;box-shadow:0 12px 40px rgba(7,18,29,0.08);
-  z-index:50
-}
-.panel.hidden{display:none}
-.filter-actions{display:flex;gap:8px}
-
-/* ========================= */
-/* CARRITO                   */
-/* ========================= */
-.cart-panel{
-  position:fixed;right:16px;top:80px;width:360px;height:70vh;
-  background:var(--card);border-radius:12px;padding:12px;
-  display:flex;flex-direction:column;z-index:60
-}
-.cart-panel.hidden{display:none}
-
-/* ========================= */
-/* MODALES                   */
-/* ========================= */
-.modal{
-  position:fixed;inset:0;background:rgba(8,12,14,0.5);
-  display:flex;align-items:center;justify-content:center;
-  z-index:80
-}
-.modal.hidden{display:none}
-.modal-content{
-  background:var(--card);
-  border-radius:12px;
-  padding:14px;
-  box-shadow:0 24px 60px rgba(7,18,29,0.12);
-  position:relative;
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-/* ========================= */
-/*  🔥 MODAL PRODUCTO COMPACTO */
-/* ========================= */
-#productModal .modal-content{
-  max-width:420px !important;
-  width:100% !important;
-}
-#productModal .modal-body{
-  flex-direction:column !important;
-}
-#modalMainImg{
-  max-width:100%;max-height:260px;object-fit:contain;
-  display:block;margin:0 auto;
-}
-#modalThumbs img{
-  width:60px;height:60px;object-fit:cover;
+body {
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
 }
 
-/* ========================= */
-/* HELPERS / RESPONSIVE      */
-/* ========================= */
-.muted{color:var(--muted)}
-.hidden{display:none}
-.badge{background:#ff3b30;color:#fff;padding:2px 7px;border-radius:50px}
+img { max-width: 100%; display: block; }
+button { cursor: pointer; }
 
-@media(max-width:640px){
-  .search-wrap{display:none}
+/* ============================
+   NAVBAR
+============================ */
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: var(--bg-alt);
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: var(--shadow);
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand {
+  font-size: 20px;
+  font-weight: bold;
+  color: var(--primary);
+  text-decoration: none;
+}
+
+.brand span {
+  color: var(--text);
+}
+
+/* ============================
+   SEARCH BAR
+============================ */
+.search-wrap {
+  flex: 1;
+  display: flex;
+  max-width: 450px;
+  position: relative;
+}
+
+.search-wrap input {
+  flex: 1;
+  padding: 8px 32px 8px 12px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  outline: none;
+}
+
+#clearSearch {
+  position: absolute;
+  right: 6px;
+  top: 6px;
+  padding: 4px;
+  opacity: 0.6;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ============================
+   BOTONES
+============================ */
+.btn {
+  padding: 8px 14px;
+  border-radius: var(--radius);
+  border: none;
+  font-size: 14px;
+  background: var(--border);
+}
+
+.btn.primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn.primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn.secondary {
+  background: #e5e5e5;
+}
+
+.btn.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+}
+
+.btn.small { font-size: 12px; padding: 6px 10px; }
+.btn.tiny { font-size: 11px; padding: 4px 8px; }
+
+.icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 18px;
+  padding: 5px;
+}
+
+/* Badges */
+.badge {
+  background: var(--primary);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 20px;
+  font-size: 11px;
+}
+
+/* ============================
+   LAYOUT GENERAL
+============================ */
+.container {
+  padding: 20px;
+  max-width: 1100px;
+  margin: auto;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.muted { color: var(--text-muted); }
+
+/* ============================
+   GRID PRODUCTOS
+============================ */
+.grid,
+#productGrid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+}
+
+/* ============================
+   PRODUCT CARD
+============================ */
+.card {
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+}
+
+.card-img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  background: #fff;
+  padding: 10px;
+}
+
+.card-body {
+  padding: 12px;
+}
+
+.card-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.card-row {
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ============================
+   PANEL LATERAL (FILTROS, CARRITO)
+============================ */
+.panel,
+.cart-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 280px;
+  height: 100vh;
+  background: var(--bg-alt);
+  border-left: 1px solid var(--border);
+  transform: translateX(100%);
+  transition: 0.3s;
+  padding: 16px;
+  overflow-y: auto;
+  z-index: 100;
+}
+
+.panel.show,
+.cart-panel.show {
+  transform: translateX(0);
+}
+
+.filter-group {
+  margin-bottom: 16px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* ============================
+   MODAL
+============================ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  opacity: 0;
+  pointer-events: none;
+  transition: .2s ease;
+}
+
+.modal.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.modal-content {
+  background: var(--bg-alt);
+  padding: 20px;
+  border-radius: var(--radius);
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow);
+}
+
+.modal-close {
+  float: right;
+  border: none;
+  background: transparent;
+  font-size: 20px;
+}
+
+/* ============================
+   PRODUCT MODAL
+============================ */
+.modal-body {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.gallery {
+  flex: 1 1 260px;
+}
+
+.meta {
+  flex: 1 1 260px;
+}
+
+.meta-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 8px;
+}
+
+/* ============================
+   EMPTY STATE
+============================ */
+.empty {
+  text-align: center;
+  padding: 40px;
+}
+
+.hidden {
+  display: none !important;
+}
+
+/* ============================
+   RESPONSIVE
+============================ */
+@media (max-width: 750px) {
+  .navbar {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .search-wrap { order: 3; width: 100%; }
 }
