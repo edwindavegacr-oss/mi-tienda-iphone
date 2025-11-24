@@ -10,7 +10,9 @@
   <header class="navbar">
     <div class="nav-left">
       <button id="menuBtn" class="icon-btn" aria-label="Abrir menú">☰</button>
-      <a href="#" class="brand">iFix<span>Market</span></a>
+
+      <!-- Logo que redirige al home -->
+      <a href="index.html" class="brand">iFix<span>Market</span></a>
     </div>
 
     <div class="search-wrap">
@@ -19,18 +21,21 @@
     </div>
 
     <div class="nav-right">
-      <button id="filterToggle" class="btn small secondary">Filtros</button>
+      <button id="filterToggle" class="btn small secondary">⁝ Filtros</button>
       <button id="favoritesBtn" class="icon-btn" title="Favoritos">♡ <span id="favCount" class="badge">0</span></button>
       <button id="themeToggle" class="icon-btn" title="Modo claro/oscuro">🌓</button>
       <button id="cartBtn" class="icon-btn" title="Abrir carrito">🛒 <span id="cartCount" class="badge">0</span></button>
+
+      <button id="loginBtn" class="btn ghost small">Iniciar sesión</button>
     </div>
   </header>
 
   <!-- SIDEBAR FILTROS -->
   <aside id="filters" class="panel hidden">
-    <h3>Filtros</h3>
+    <h3>Filtrar productos</h3>
+
     <div class="filter-group">
-      <label>Modelo</label>
+      <label for="filterModel">Modelo</label>
       <select id="filterModel">
         <option value="">Todos</option>
         <option>iPhone 7</option>
@@ -44,9 +49,9 @@
     </div>
 
     <div class="filter-group">
-      <label>Tipo</label>
+      <label for="filterType">Categoría</label>
       <select id="filterType">
-        <option value="">Todos</option>
+        <option value="">Todas</option>
         <option>Pantalla</option>
         <option>Batería</option>
         <option>Cámara</option>
@@ -57,16 +62,21 @@
       </select>
     </div>
 
-    <div class="filter-group range">
-      <label>Precio (COP)</label>
-      <div class="range-row">
-        <input id="priceMin" type="number" placeholder="Min">
-        <input id="priceMax" type="number" placeholder="Max">
-      </div>
+    <div class="filter-group">
+      <label>Precio mínimo</label>
+      <input id="priceMin" type="number" placeholder="0">
     </div>
 
     <div class="filter-group">
-      <label><input id="filterFreeShip" type="checkbox"> Envío gratis</label>
+      <label>Precio máximo</label>
+      <input id="priceMax" type="number" placeholder="500000">
+    </div>
+
+    <div class="filter-group">
+      <label class="check-row">
+        <input id="filterFreeShip" type="checkbox">
+        <span>Envío gratis</span>
+      </label>
     </div>
 
     <div class="filter-actions">
@@ -92,12 +102,11 @@
             <option value="name_asc">A → Z</option>
           </select>
         </label>
+        <button id="adminPanelBtn" class="btn ghost hidden">Admin: Agregar producto</button>
       </div>
     </section>
 
-    <section id="catalog" class="grid" aria-live="polite">
-      <!-- los productos se inyectan desde JS -->
-    </section>
+    <section id="catalog" class="grid" aria-live="polite"></section>
 
     <div id="emptyState" class="empty hidden">
       <p>No se encontraron productos con esos criterios.</p>
@@ -111,6 +120,7 @@
       <h3>Carrito <small id="cartItemsCount">0 items</small></h3>
       <button id="closeCart" class="icon-btn">✕</button>
     </div>
+
     <div id="cartList" class="cart-list"></div>
 
     <div class="cart-footer">
@@ -118,6 +128,7 @@
         <div>Subtotal</div>
         <div id="cartSubtotal">COP $0</div>
       </div>
+
       <button id="checkoutBtn" class="btn primary">Pagar</button>
       <button id="clearCartBtn" class="btn ghost">Vaciar</button>
     </div>
@@ -132,6 +143,7 @@
           <img id="modalMainImg" src="" alt="">
           <div id="modalThumbs" class="thumbs"></div>
         </div>
+
         <div class="meta">
           <h2 id="modalTitle">Título</h2>
           <div id="modalPrice" class="price">COP $0</div>
@@ -151,9 +163,109 @@
     </div>
   </div>
 
+  <!-- MODAL LOGIN (ficticio) -->
+  <div id="loginModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeLoginModal" class="modal-close">✕</button>
+      <h2>Iniciar sesión</h2>
+      <form id="loginForm" class="form">
+        <label>Email</label>
+        <input id="loginEmail" type="email" required placeholder="tucorreo@ejemplo.com">
+        <label>Contraseña</label>
+        <input id="loginPass" type="password" required placeholder="••••••">
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button type="submit" class="btn primary">Entrar</button>
+          <button type="button" id="loginCloseBtn" class="btn ghost">Cancelar</button>
+        </div>
+        <p class="muted" style="margin-top:10px;font-size:13px">
+          Nota: este login es ficticio. Usa <strong>admin@ifix.com</strong> para ver panel admin.
+        </p>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL ADMIN AGREGAR/EDITAR PRODUCTO -->
+  <div id="adminModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeAdminModal" class="modal-close">✕</button>
+      <h2 id="adminModalTitle">Agregar producto</h2>
+      <form id="addProductForm" class="form">
+        <label>Título</label>
+        <input id="pTitle" required>
+        <label>Precio (COP)</label>
+        <input id="pPrice" type="number" required>
+        <label>Tipo</label>
+        <input id="pType" required>
+        <label>Modelo</label>
+        <input id="pModel" required>
+        <label>Imagen (URL)</label>
+        <input id="pImage" placeholder="https://...">
+        <label>Descripción</label>
+        <textarea id="pDesc"></textarea>
+        <label><input id="pFreeShip" type="checkbox"> Envío gratis</label>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button type="submit" class="btn primary" id="saveProductBtn">Guardar</button>
+          <button type="button" id="adminCancelBtn" class="btn ghost">Cancelar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL CHECKOUT / PAGO (ficticio, con campos de tarjeta) -->
+  <div id="checkoutModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeCheckoutModal" class="modal-close">✕</button>
+      <h2>Pago con tarjeta</h2>
+
+      <div id="checkoutItems"></div>
+
+      <div class="pay-form" style="margin-top:12px">
+        <label>Nombre del titular</label>
+        <input type="text" id="payName" placeholder="Nombre completo">
+
+        <label>Número de tarjeta</label>
+        <input type="text" id="payCard" maxlength="19" placeholder="1234 5678 9012 3456">
+
+        <div class="row">
+          <div>
+            <label>Expiración (MM/AA)</label>
+            <input type="text" id="payExp" maxlength="5" placeholder="MM/AA">
+          </div>
+
+          <div>
+            <label>CVV</label>
+            <input type="text" id="payCVV" maxlength="4" placeholder="123">
+          </div>
+        </div>
+
+        <div class="totals" style="margin-top:10px">
+          <div>Subtotal</div>
+          <div id="checkoutSubtotal">COP $0</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <button id="fakePayBtn" class="btn primary">Confirmar pago</button>
+          <button id="checkoutCancelBtn" class="btn ghost">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RECEIPT -->
+  <div id="receiptModal" class="modal hidden" role="dialog" aria-hidden="true">
+    <div class="modal-content">
+      <button id="closeReceiptModal" class="modal-close">✕</button>
+      <h2>Pago simulado</h2>
+      <p id="receiptText">Gracias — tu pago fue simulado correctamente.</p>
+      <div style="display:flex;gap:8px;margin-top:12px">
+        <button id="receiptOkBtn" class="btn primary">Aceptar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANTILLA PRODUCTO -->
   <template id="productTemplate">
     <article class="card" tabindex="0">
-      <div class="ribbon"></div>
       <img class="card-img" src="" alt="">
       <div class="card-body">
         <div class="card-title"></div>
@@ -162,7 +274,9 @@
           <div class="price"></div>
           <div class="card-actions">
             <button class="btn tiny addCart">Agregar</button>
-            <button class="icon-btn favBtn" title="Agregar a favoritos">♡</button>
+            <button class="icon-btn favBtn">♡</button>
+            <button class="btn tiny editBtn hidden">Editar</button>
+            <button class="btn tiny deleteBtn hidden">Eliminar</button>
           </div>
         </div>
       </div>
@@ -172,3 +286,6 @@
   <script src="script.js"></script>
 </body>
 </html>
+
+
+
